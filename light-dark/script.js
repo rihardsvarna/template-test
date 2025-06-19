@@ -1,3 +1,4 @@
+
 const toggleSwitch = document.querySelector('input[type="checkbox"]');
 const nav = document.getElementById('nav');
 const toggleIcon = document.getElementById('toggle-icon');
@@ -6,6 +7,11 @@ const image2 = document.getElementById('image2');
 const image3 = document.getElementById('image3');
 const textBox = document.getElementById('text-box');
 
+// Capitalize the first letter of a string
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 // Dark or Light Images
 function imageMode(color) {
     image1.src = `img/custom/pasta_${color}.svg`;
@@ -13,22 +19,12 @@ function imageMode(color) {
     image3.src = `img/custom/dog_${color}.svg`;
 }
 
-// Dark Mode
-function darkMode() {
-    nav.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-    textBox.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-    toggleIcon.children[0].textContent = 'Dark Mode';
-    toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon');
-    imageMode('dark');
-}
-
-// Light Mode
-function lightMode() {
-    nav.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-    textBox.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-    toggleIcon.children[0].textContent = 'Light Mode';
-    toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
-    imageMode('light');
+// Theme Switcher
+function themeSwitcher(theme, faClass) {
+    toggleIcon.children[0].textContent = `${capitalize(theme)} Mode`;
+    toggleIcon.children[1].setAttribute('class', '');
+    toggleIcon.children[1].classList.add(`fa-solid`, faClass);
+    imageMode(theme);
 }
 
 // Switch Theme Dynamically
@@ -36,11 +32,11 @@ function switchTheme(event) {
     if (event.target.checked) {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
-        darkMode();
+        themeSwitcher('dark', 'fa-moon');
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
-        lightMode();
+        themeSwitcher('light', 'fa-sun');
     }
 }
 
@@ -55,9 +51,9 @@ if (currentTheme) {
 
     if (currentTheme == 'dark') {
         toggleSwitch.checked = true;
-        darkMode();
+        themeSwitcher('dark', 'fa-moon');
     } else if (currentTheme == 'light') {
         toggleSwitch.checked = false;
-        lightMode();
+        themeSwitcher('light', 'fa-sun');
     }
 }
